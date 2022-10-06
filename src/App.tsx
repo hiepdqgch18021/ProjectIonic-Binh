@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonBadge,IonTabBar, IonIcon, IonLabel, IonRouterOutlet, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 
@@ -21,22 +21,38 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Setting from './pages/Detail';
+import InformationDetail from './pages/Detail';
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+
+      <IonTabs>
+        <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home />
+          </Route>
+
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route exact path="/TripDetail/:id">
+            <InformationDetail/>
+          </Route>
+        </IonRouterOutlet>
+
+        <IonTabBar slot='bottom'>
+          <IonTabButton tab="myHome" href='/home'>
+            <IonLabel>Home</IonLabel>
+          </IonTabButton>
+          
+        </IonTabBar>
+      </IonTabs>
+  </IonReactRouter>
+  </IonApp >
 );
 
 export default App;
