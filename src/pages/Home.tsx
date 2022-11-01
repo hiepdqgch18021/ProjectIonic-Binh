@@ -37,6 +37,8 @@ async function fetchData(){
   return removeDB;
   }
 
+
+
   const saveHandler = async () =>{
     const newInfo : TripInfo ={
       'tripName':tripName ,
@@ -48,10 +50,11 @@ async function fetchData(){
       'costs':costs,
     }
 
-    if(!tripName ||!destination ||!tripDate ||!riskAssessment ||!description ||!leader ||!costs){
+    if(!tripName ||!destination ||!tripDate ||!riskAssessment ||!leader ||!costs){
       alert("You input lacking information")
     }else{ 
-      await insertTripInfo(newInfo);     
+      await insertTripInfo(newInfo); 
+      window.location.href="/home";    
     }
   }
 
@@ -120,7 +123,8 @@ async function fetchData(){
           <IonItem>{riskAssessment ?? '(none selected'}</IonItem>
         </IonList>
 
-          <IonButton onClick={() => setSaveInfo(true)} expand="block">save</IonButton>          
+        <IonButton onClick={() => setSaveInfo(true)} expand="block">save</IonButton>          
+       
        <IonAlert
          isOpen={SaveInfo}
          onDidDismiss={() => setSaveInfo(false)}
@@ -137,13 +141,13 @@ async function fetchData(){
            },
            {
              text: 'Save',
-             handler: () => {              
+             handler: () => { 
+
               saveHandler ()
              }
            }
          ]}
        />
-
 
           <IonButton onClick={() => setDeleteInfo(true)} color="danger" expand="block">Delete</IonButton>          
        <IonAlert
@@ -163,7 +167,7 @@ async function fetchData(){
            {
              text: 'Delete',
              handler: () => {              
-              saveHandler ()
+              deleteAllInfoHandler ()
              }
            }
          ]}
@@ -173,11 +177,10 @@ async function fetchData(){
           <IonButton onClick={deleteAllInfoHandler} color="danger" class='ion-margin'>Delete</IonButton><br /> */}
           <IonItemDivider>List All Information Of The Trip</IonItemDivider>
 
-
       { allInfo &&
         <IonList>
           { allInfo.map(c=>
-                    <IonItem routerLink={'/TripDetail/' + c.id} button key={c.id}>
+                    <IonItem routerLink={'/Details/' + c.id} button key={c.id}>
                       <IonLabel color={"primary"}>{c.tripName}</IonLabel>                    
                     </IonItem>                
               

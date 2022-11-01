@@ -1,5 +1,4 @@
-import { eventNames } from 'cluster';
-import { openDB, deleteDB } from 'idb';
+import { openDB} from 'idb';
 import { TripInfo } from "./models/TripInfo";
 
 
@@ -27,6 +26,7 @@ export async function getOneTripInfo(id:number){
 export async function deleteOneTripInfo(id:number){
     const dbRemovedOne = await openDB(DATABASE_NAME, 1)
     await dbRemovedOne.delete("trips",id);
+    window.location.href="/home";
 }
 
 export async function deleteAllTripInfo(){

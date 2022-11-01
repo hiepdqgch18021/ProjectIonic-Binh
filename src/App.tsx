@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonBadge,IonTabBar, IonIcon, IonLabel, IonRouterOutlet, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
+import { IonApp, IonTabBar, IonLabel, IonRouterOutlet, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 
@@ -21,8 +21,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Setting from './pages/Detail';
-import InformationDetail from './pages/Detail';
+import Detail from './pages/Detail';
 
 setupIonicReact();
 
@@ -39,19 +38,15 @@ const App: React.FC = () => (
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <Route exact path="/TripDetail/:id">
-            <InformationDetail/>
+          <Route exact path="/Details/:id">
+            <Detail/>
           </Route>
         </IonRouterOutlet>
 
-        <IonTabBar slot='bottom'>
-          <IonTabButton tab="myHome" href='/home'>
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
-          
+        <IonTabBar slot='bottom'>  
         </IonTabBar>
       </IonTabs>
-  </IonReactRouter>
+    </IonReactRouter>
   </IonApp >
 );
 

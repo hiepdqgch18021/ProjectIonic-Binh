@@ -1,35 +1,41 @@
-import { IonButton,IonAlert, IonContent,IonIcon, IonHeader, IonListHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonPopover, IonTitle, IonToolbar } from '@ionic/react';
+import {
+  useIonViewWillEnter, IonButton, IonAlert, IonContent, IonIcon, IonHeader, IonListHeader,
+  IonItem, IonLabel, IonList, IonPage, IonTitle, IonButtons, IonBackButton, IonToolbar
+} from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { TripInfo } from '../models/TripInfo';
-import { getOneTripInfo,deleteOneTripInfo} from '../databaseHandle';
-import { useHistory, useParams } from 'react-router';
+import { getOneTripInfo, deleteOneTripInfo } from '../databaseHandle';
+import { RouteComponentProps, useParams } from 'react-router';
 import { trash } from 'ionicons/icons';
 
 import './Home.css';
 
 
-interface IdParam{
+interface IdParam {
   id: string
 }
 
-const InformationDetail: React.FC = () => {
 
-  const [tripName,setTripName] = useState<string>('');
-  const [destination,setDestination] = useState<string>('');
-  const [tripDate,setTripDate] = useState<string>();
+
+const Detail: React.FC = () => {
+
+  const [tripName, setTripName] = useState<string>('');
+  const [destination, setDestination] = useState<string>('');
+  const [tripDate, setTripDate] = useState<string>();
   const [riskAssessment, setRiskAssessment] = useState<boolean>();
   const [description, setDescription] = useState<string>('');
-  const [costs,setCosts] =useState<string>();
-  const[leader,setLeader] = useState<string>('');
+  const [costs, setCosts] = useState<string>();
+  const [leader, setLeader] = useState<string>('');
 
   const [DeleteOneInfo, setDeleteOneInfo] = useState(false);
 
-  const {id} = useParams<IdParam>()
-  const history = useHistory()
-  
+  const { id } = useParams<IdParam>()
+  // const history = useHistory()
+
   // getOneTripInfo
   async function fetchData() {
-    const result = await getOneTripInfo(Number.parseInt(id)) as TripInfo ;
+    console.log("fetching id " + id)
+    const result = await getOneTripInfo(Number.parseInt(id)) as TripInfo;
     setTripName(result.tripName);
     setDestination(result.destination);
     setTripDate(result.tripDate);
@@ -39,20 +45,31 @@ const InformationDetail: React.FC = () => {
     setLeader(result.leader);
   }
 
-  async function deleteOneInfoHandler (){
+  async function deleteOneInfoHandler() {
+
     await deleteOneTripInfo(Number.parseInt(id))
-    history.goBack();
+    // history.goBack();
   }
-  useEffect(()=>{
+  useEffect(() => {
+    // fetchData();
+  }, []);
+
+  useIonViewWillEnter(() => {
+    console.log('ionViewWillEnter event fired');
     fetchData();
-  },[]);
+  });
+
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle> M-Expense </IonTitle>
+          <IonButtons slot="start">
+            <IonBackButton />
+          </IonButtons>
         </IonToolbar>
+
       </IonHeader>
 
       <IonContent fullscreen>
@@ -72,7 +89,7 @@ const InformationDetail: React.FC = () => {
           <IonItem>
             <IonLabel >Date of the trip</IonLabel>
             <IonLabel>{tripDate}</IonLabel>
-          </IonItem>          
+          </IonItem>
           <IonItem>
             <IonLabel >Description</IonLabel>
             <IonLabel>{description}</IonLabel>
@@ -91,33 +108,33 @@ const InformationDetail: React.FC = () => {
       <IonButton onClick={() => setDeleteOneInfo(true)} class='ion-margin' color="danger" expand="block">
         <IonIcon slot="icon-only" icon={trash}></IonIcon>
       </IonButton>
-       
-       <IonAlert
-         isOpen={DeleteOneInfo}
-         onDidDismiss={() => setDeleteOneInfo(false)}
-         header={'Confirm!'}
-         message={`You really want to delete ' ${tripName} '`}
-         buttons={[
-           {
-             text: 'Back',
-             role: 'cancel',
-             cssClass: 'secondary',
-             handler: blah => {
-               console.log('Confirm Cancel: blah');
-             }
-           },
 
-           {
-             text: 'Delete',
-             handler: () => {
+      <IonAlert
+        isOpen={DeleteOneInfo}
+        onDidDismiss={() => setDeleteOneInfo(false)}
+        header={'Confirm!'}
+        message={`You really want to delete ' ${tripName} '`}
+        buttons={[
+          {
+            text: 'Back',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: blah => {
+              console.log('Confirm Cancel: blah');
+            }
+          },
+
+          {
+            text: 'Delete',
+            handler: () => {
               deleteOneInfoHandler()
-             }
-           }
-         ]}
-       />
+            }
+          }
+        ]}
+      />
 
     </IonPage>
   );
 };
 
-export default InformationDetail;
+export default Detail;
